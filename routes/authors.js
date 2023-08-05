@@ -23,9 +23,22 @@ const authors = [
 * @method get
 * @access public
 */
-router.get('/', (req, res) => {
-  res.status(200).json(authors);
+router.get('/', async (req, res) => {
+
+  try {
+    const authorList =await Author.find()
+  res.status(200).json(authorList);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"erorr"})
+  }
+    
 });
+
+// 
+// 
+
+
 
 
 /*
@@ -34,13 +47,18 @@ router.get('/', (req, res) => {
 * @method get
 * @access public
 */
-router.get('/:id', (req, res) => {
-  const author = authors.find(b => b.id === req.params.id); // No need to parse id as it's a string
+router.get('/:id', async (req, res) => {
+try {
+  const author = await Author.findById(req.params.id);
   if (author) {
     res.status(200).json(author);
   } else {
     res.status(404).json({ message: 'author not found' });
   }
+} catch (error) {
+  console.log(error);
+    res.status(500).json({message:"erorr"})
+}
 });
 
 
