@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Joi = require('joi');
 
 
 
@@ -37,6 +38,38 @@ image: {
 
 const Author = mongoose.model("Author", AuthorSchema);
 
+
+
+
+function validateUpdateAuthor(obj) {
+  const schema = Joi.object({
+  firstName: Joi.string().trim().min(3).max(200),
+  secondName: Joi.string().trim().min(3).max(200),
+  nationality: Joi.string().trim().min(2).max(100),
+  image: Joi.string(),
+})
+
+  return schema.validate(obj) ;
+}
+
+
+function validateCreateAuthor(obj) {
+  const schema = Joi.object({
+  firstName: Joi.string().trim().min(3).max(200).required(),
+  secondName: Joi.string().trim().min(3).max(200).required(),
+  nationality: Joi.string().trim().min(2).max(100),
+  image: Joi.string(),
+})
+
+  return schema.validate(obj) ;
+}
+
+
+
+
+
 module.exports = {
-  Author
+  Author,
+  validateCreateAuthor,
+  validateUpdateAuthor
 }

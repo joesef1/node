@@ -1,20 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
-const {Author} = require("../models/Author");
 
-
-
-const authors = [
-  {
-    id: '1',
-    firstName: 'joe',
-    secondName: 'yousef',
-    nationality: 'egypt',
-    image: ''
-  },
-  
-];
+const {Author , validateUpdateAuthor, validateCreateAuthor} = require("../models/Author");
 
 
 /*
@@ -34,11 +21,6 @@ router.get('/', async (req, res) => {
   }
     
 });
-
-// 
-// 
-
-
 
 
 /*
@@ -94,71 +76,62 @@ router.post("/", async (req,res) => {
 
   });
 
-function validateCreateAuthor(obj) {
-    const schema = Joi.object({
-    firstName: Joi.string().trim().min(3).max(200).required(),
-    secondName: Joi.string().trim().min(3).max(200).required(),
-    nationality: Joi.string().trim().min(3).max(200),
-    image: Joi.string(),
-  })
 
-    return schema.validate(obj) ;
-}
-
-
-// Update Author
-router.put("/:id", (req, res) => {
+/*
+* @desc get one author by id
+* @route /api/authors/:id
+* @method put
+* @access public
+*/
+router.put("/:id", async (req, res) => {
   const { error } = validateUpdateAuthor(req.body);
 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const author = authors.find(b => b.id === req.params.id);
 
-  if (author) {
-    // Update author properties
-    author.firstName = req.body.firstName;
-    author.secondName = req.body.secondName;
-    author.nationality = req.body.nationality;
-    author.image = req.body.image;
-
+  try {
+      const author = await Author.findByIdAndUpdate(
+      req.params.id,{
+    $set:{
+      firstName : req.body.firstName,
+      secondName : req.body.secondName,
+      nationality : req.body.nationality,
+      image : req.body.image
+    }
+  },{new:true});
     res.status(200).json({ message: 'author updated' });
-  } else {
-    res.status(404).json({ message: 'author not found' });
+
+  } catch (error) {
+    res.status(500).json({message:"erorr"})
   }
+
+  
 });
 
 
-function validateUpdateAuthor(obj) {
-  const schema = Joi.object({
-  firstName: Joi.string().trim().min(3).max(200),
-  secondName: Joi.string().trim().min(3).max(200),
-  nationality: Joi.string().trim().min(3).max(200),
-  image: Joi.string(),
-})
+/*
+* @desc get one author by id
+* @route /api/authors/:id
+* @method delete
+* @access public
+*/
+router.delete("/:id", async (req,res) => {
 
-  return schema.validate(obj) ;
-}
-
-
-
-
-router.delete("/:id", (req,res) => {
-
-  const author = authors.find(b => b.id === req.params.id); // No need to parse id as it's a string
+  try {
+      const author = await Author.findById(req.params.id); 
   if (author) {
+    await Author.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'author deleted' });
   } else {
     res.status(404).json({ message: 'author not found' });
   }
+  } catch (error) {
+    res.status(500).json({message:"erorr"})
+  }
 
 });
-
-
-
-
-    
 
 module.exports = router
 
