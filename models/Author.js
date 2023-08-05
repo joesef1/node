@@ -10,7 +10,7 @@ const AuthorSchema = new mongoose.Schema({
     minlength:3,
     maxlength:200,
 },
-lastName: {
+secondName: {
   type: String,
   required: true,
   trim: true,
@@ -35,7 +35,7 @@ image: {
 })
 
 
-const Author = mongoose.model("Author", AuthorSchema)
+const Author = mongoose.model("Author", AuthorSchema);
 
 module.exports = {
   Author

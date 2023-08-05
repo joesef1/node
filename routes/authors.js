@@ -50,7 +50,7 @@ router.get('/:id', (req, res) => {
 * @method post
 * @access public
 */
-router.post("/", (req,res) => {
+router.post("/", async (req,res) => {
   const { error } = validateCreateAuthor(req.body) ;
 
     if(error) {
@@ -58,17 +58,22 @@ router.post("/", (req,res) => {
     }
   
 
-  
-  const author = {
-  id:          authors.length + 1,
-  firstName:   req.body.firstName,
-  secondName:  req.body.secondName,
-  nationality: req.body.nationality,
-  image:       req.body.image,
+  try {
+  const author = new Author({
+    firstName:   req.body.firstName,
+    secondName:  req.body.secondName,
+    nationality: req.body.nationality,
+    image:       req.body.image,
+    });
+    
+    const result =await author.save()
+    
+    res.status(201).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"erorr"})
   }
-  
-  authors.push(author)
-  res.status(201).json(author); // 201 => created successfully
+
   });
 
 function validateCreateAuthor(obj) {
