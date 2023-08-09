@@ -33,7 +33,6 @@ req.body.password = await bcrypt.hash(req.body.password , salt)
       email:    req.body.email,
       userName: req.body.userName,
       password: req.body.password,
-      isAdmin:  req.body.isAdmin,
     });
       
     const result = await user.save();

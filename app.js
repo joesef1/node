@@ -1,33 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-const dotenv = require('dotenv');
-dotenv.config()
- const logger = require('./middlewares/logger');
+require('dotenv').config()
+const logger = require('./middlewares/logger');
 const {notFound,errorHanlder} = require('./middlewares/erorrs');
-
-
-mongoose
-.connect(process.env.MONGO_URI)
-.then(() => console.log("Connected To MongoDB..."))
-.catch((error) => console.log("Connection Failed To MongoDB!", error));
-
-
-
-const bookspath = require('./routes/books');
-const authorspath = require('./routes/authors');
-const authpath = require('./routes/auth');
-const userspath = require('./routes/users');
+const connectToDB = require('./config/db');
 
 app.use(logger);
 app.use(express.json())
 const Joi = require('joi');
 
+connectToDB()
+
 //routes
-app.use("/api/books" , bookspath)
-app.use("/api/authors" , authorspath)
-app.use("/api/auth" , authpath);
-app.use("/api/users" , userspath);
+app.use("/api/books" , require('./routes/books'))
+app.use("/api/authors" , require('./routes/authors'))
+app.use("/api/auth" ,  require('./routes/auth'));
+app.use("/api/users" ,   require('./routes/users'));
 
  // Error Hanlder Middleware
  app.use(notFound);
