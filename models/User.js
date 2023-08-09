@@ -1,39 +1,38 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const Joi = require('joi');
-
-
 
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     trim: true,
-    minlength:5,
-    maxlength:100,
-    unique:true,
-},
-userName: {
-  type: String,
-  required: true,
-  trim: true,
-  minlength:2,
-  maxlength:200,
-},
-
-password: {
-  type: String,
-  required: true,
-  trim: true,
-  minlength:6,
-},
-
-isAdmin: {
-  type: Joi.boolean,
-  default: "false",
-},
-},{
+    minlength: 5,
+    maxlength: 100,
+    unique: true,
+  },
+  userName: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 2,
+    maxlength: 200,
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 6,
+  },
+  isAdmin: {
+    type: Boolean, // Corrected type definition
+    default: false, // Note: Set the default value as a boolean
+  },
+}, {
   timestamps: true
-})
+});
+
+// ... rest of the code remains unchanged ...
+
 
 
 const User = mongoose.model("User", UserSchema);
@@ -70,7 +69,7 @@ function validateUpdateUser(obj) {
     email: Joi.string().trim().min(5).max(100).email(),
     userName: Joi.string().trim().min(2).max(200),
     password: Joi.string().trim().min(6),
-    isAdmin: Joi.bool(),
+    isAdmin: Joi.bool()
 })
 
   return schema.validate(obj) ;
