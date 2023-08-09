@@ -17,6 +17,7 @@ mongoose
 const bookspath = require('./routes/books');
 const authorspath = require('./routes/authors');
 const authpath = require('./routes/auth');
+const userspath = require('./routes/users');
 
 app.use(logger);
 app.use(express.json())
@@ -26,6 +27,7 @@ const Joi = require('joi');
 app.use("/api/books" , bookspath)
 app.use("/api/authors" , authorspath)
 app.use("/api/auth" , authpath);
+app.use("/api/users" , userspath);
 
  // Error Hanlder Middleware
  app.use(notFound);
