@@ -11,7 +11,7 @@ const AuthorSchema = new mongoose.Schema({
     minlength:3,
     maxlength:200,
 },
-secondName: {
+lastName: {
   type: String,
   required: true,
   trim: true,

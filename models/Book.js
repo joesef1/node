@@ -27,7 +27,7 @@ description: {
 cover: {
   type: String,
   required: true,
-  enum: ["soft-cover","hard cover"],
+  enum: ["soft cover","hard cover"],
 },
 
 price: {
